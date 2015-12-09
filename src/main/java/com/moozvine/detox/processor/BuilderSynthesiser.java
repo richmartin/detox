@@ -374,7 +374,7 @@ public class BuilderSynthesiser {
             break;
           case LONG:
             w.append(String.format(
-                "          detox_result = detox_result * 37 + (int)(%1$s() ^ (%1$s >>> 32));\n",
+                "          detox_result = detox_result * 37 + (int)(%1$s() ^ (%1$s() >>> 32));\n",
                 idMember.getGetterName()));
             break;
           case FLOAT:
