@@ -4,7 +4,7 @@ Java Data Transfer &amp; Value Objects made beautiful
 # Caveat
 Detox is a brand, spanking-new project, at version approximately 0.0001. Whilst it is used extensively throughout a 
 reasonably large product (moozvine.com), its development has followed the needs of that one project. It is 
-chock-full of raw edges and check-empty of very much in the way of useful documentation. This will improve over time 
+chock-full of raw edges and chock-empty of very much in the way of useful documentation. This will improve over time 
 (more so if you actually use it and provide feedback / raise bugs). In the meantime, if you are happy on the bleeding
 edge, we (Moozvine) think it is absolutely spiffing — making our codebase far simpler, cleaner and error-free — and 
 we want to share it with the world as we continue to improve it.
@@ -71,9 +71,9 @@ to simplify these methods as the code evolves, you lose a lot of the benefits of
 you in the first place. Note that this simple class, long though it is, is far from complete: it omits a toString 
 method, it omits any kind of validation or null-checking on the parameters to the constructor, it omits any kind of 
 declaration as to the nullity of its fields (perhaps dateOfBirth is an optional field that some users provide), and it 
-omits any kind “business” validation of the fields — e.g. requiring dateOfBirth to be in the past.
+omits any kind of “business” validation of the fields — e.g. requiring dateOfBirth to be in the past.
 
-Instance construction is another problem here.
+Instance construction is another problem here:
 
 ```java
 User newUser = new User(nextAvailableUserId, name, emailAddress, null);
@@ -84,7 +84,7 @@ instance construction becomes an error-prone burden, especially if several field
 An alternative to massive constructor parameter lists is to either introduce a hand-crafted fluent builder (even more
 boilerplate), or use setters (eliminating the immutability property of the instance).
  
-The same type with detox, looks like this:
+The same value object with detox, looks like this:
 
 ```java
 @GenerateBuilder
@@ -122,7 +122,7 @@ understands any of javax.annotation.Nullable, org.jetbrains.annotations.Nullable
 edu.umd.cs.findbugs.annotations.Nullable, or android.support.annotation.Nullable) then the _with_ method will throw 
 an IllegalArgumentException if you try to pass null.
 
-Often you want to impose constraints on the values of fields. For example, if the id field must be a positive:
+Often you want to impose constraints on the values of fields. For example, if the id field must be positive:
 
 ```java
 @GenerateBuilder
@@ -134,7 +134,7 @@ public interface User {
 }
 ```
 
-Where the @Validate annotation takes a class implementing the com.moozvine.detox.FieldValidator interface. The 
+The @Validate annotation takes a class implementing the com.moozvine.detox.FieldValidator interface. The 
 com.moozvine.detox.validators package contains a bunch of useful general purpose validators you can use in your classes,
 but if you want something specific, you can, of course, just implement your own FieldValidator,
 
@@ -231,7 +231,7 @@ use to seeing value objects as classes, but it has some significant advantages. 
 our value object _is_ from any particular implementation of it, is not only nice from a theoretical point of view, 
 but it allows other specialized implementations to exist side-by-side in your codebase. For example,
 
-1. An implementation designed to support JSON serialization for passing objects back and forth to the client. The code 
+* An implementation designed to support JSON serialization for passing objects back and forth to the client. The code 
 responsible for deserializing the request needs only return an instance of the User interface, rather than 
 being forced to return a particular implementation: 
 
@@ -239,11 +239,11 @@ being forced to return a particular implementation:
 User fromClient = serializationService.fromRequest(httpServletRequest);
 ```
 
-2. An implementation designed for persistence in a database. Whatever persistence framework your project is using, you 
+* An implementation designed for persistence in a database. Whatever persistence framework your project is using, you 
 will typically have to implement a class to represent the stored data; with the framework often imposing 
 onerous constraints on the design of the class: e.g. a public no-arg constructor (and, consequently, non-final 
 fields), a non-final class, etc. It is then common to map back and forth between these persistence classes and the 
-data-transfer classes, resulting in a a proliferation of mapping code for each entity. Detox, by using interfaces to 
+data-transfer classes, resulting in a proliferation of mapping code for each entity. Detox, by using interfaces to 
 define its value objects, allows the persistence classes to simply _implement_ the value object interface in the 
 normal way,  
 
@@ -256,13 +256,13 @@ public final class UserEntity implements User {
 }
 ```
 
-and the resulting object returned from your persistence code can be used seemlessly throughout your code together 
-with other implementations of User.
+and the resulting object returned from your persistence code can be used seemlessly throughout your code alongside 
+other implementations of User.
 
 It's important to note that validation is also defined on the _interface_ rather than on specific implementations. 
 Conceptually, this means that the validation rules defined by the interface define what is permissible for any instance
 of that value object. Detox's implementations will always make sure they obey the validation rules, if you implement 
-your own implementations of your value objects you should ensure that they also either invoke the validators 
+your own implementations of your value objects you should ensure that they also either invoke the declared validators 
 (recommended), or enforce conformity in some other way. 
 
 This freedom comes from defining a value object as _what it is_ rather than _how it is implemented_.
@@ -272,7 +272,8 @@ A core design goal throughout computer science is to push error detection as clo
 Editing &rarr; Compiling &rarr; Testing &rarr; Running. The earlier up that stack we can detect errors, the more 
 efficient our whole development process. That's why testing is better than not testing and why strongly (statically)
 typed languages are better than weakly (or dynamically) typed ones — because they allow compilers and editors to 
-detect errors earlier. (It's also why writing server-side code in JS is an extremely bad idea.)  
+detect errors earlier. (It's also why writing server-side code in JS is an extremely bad idea, but… don't get me
+started.)  
 
 Detox builders follow this principle by ensuring at compile/edit time that all mandatory (non-nullable) fields on a 
 value object are set. It does this by having each of the fluent setter methods return a type that does not expose the 
@@ -284,11 +285,11 @@ build method until all the mandatory fields are set. In the above example,
 and build methods.
 
 This makes writing instance-creation code in a modern IDE an extremely elegant, guided process: the IDE suggests each
-method to you, telling you exactly what you need to supply for each field, and ensure you don't miss any mandatory 
+method to you, telling you exactly what you need to supply for each field, and ensuring you don't miss any mandatory 
 fields.
   
 More importantly, as the code evolves, if mandatory fields are added, existing instance-creation code that doesn't 
-provide the new field will fail at compile-time rather than leading to unexpected runtime behaviour.  
+provide the new field will fail at _compile-time_ rather than leading to unexpected _runtime_ behaviour.  
 
 
 ## Immutability
@@ -321,7 +322,8 @@ We fundamentally believe that the definition of _what is_ your value object, inc
 interface and that the tool should be responsible for creating beautiful, easy to use implementations of that interface.
    
 AutoValue, however, is much more mature than Detox and has been used in a much wider range of projects. If you don't 
-object to their approach or if you want something less bleeding-edge, AutoValue should be at the top of your list.
+object to their approach or if you want something less bleeding-edge than Detox, AutoValue should be at the top of
+your list.
   
 ## Lombok
 [Lombok](https://projectlombok.org) is much more long-standing than either AutoValue or Detox. It's also much more 
