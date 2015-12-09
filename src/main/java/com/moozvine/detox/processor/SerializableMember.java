@@ -94,7 +94,8 @@ public class SerializableMember {
     try {
       return method.getAnnotation(Validate.class).value().getCanonicalName();
     } catch (final MirroredTypeException e) {
-      return e.getTypeMirror().toString();
+      // If the validator class has not yet been compiled, will have a confusing <any?>. prefix.
+      return e.getTypeMirror().toString().replaceAll("<any\\?>\\.", "");
     }
   }
 
