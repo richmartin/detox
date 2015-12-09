@@ -1,6 +1,15 @@
 # detox
 Java Data Transfer &amp; Value Objects made beautiful
 
+# Caveat
+Detox is a brand, spanking-new project, at version approximately 0.0001. Whilst it is used extensively throughout a 
+reasonably large product (moozvine.com), its development has followed the needs of that one project. It is 
+chock-full of raw edges and check-empty of very much in the way of useful documentation. This will improve over time 
+(more so if you actually use it and provide feedback / raise bugs). In the meantime, if you are happy on the bleeding
+edge, we (Moozvine) think it is absolutely spiffing — making our codebase far simpler, cleaner and error-free — and 
+we want to share it with the world as we continue to improve it.
+
+
 # Introduction
 Value Objects in Java are a pain. Such a simple concept — an object representing a collection of fields — yet 
 getting them right is both notoriously difficult, requiring well-crafted .equals() and .hashcode() methods, and 
@@ -284,7 +293,7 @@ provide the new field will fail at compile-time rather than leading to unexpecte
 
 ## Immutability
 The instances created by Detox's builders are all immutable. Following the immutable value object pattern, while 
-being an well-established best practice, this leads to an obvious question: what do we do when we want to represent a 
+being an well-established best practice, leads to an obvious question: what do we do when we want to represent a 
 change to an instance, e.g. if the user has changed their email address? We create a new instance copied from the old 
 instance,
  
@@ -305,14 +314,14 @@ instance,
 ## AutoValue
 [AutoValue](https://github.com/google/auto/tree/master/value) is an excellent project created by some really smart 
 guys with very similar goals to Detox. A key difference is that where Detox uses interfaces to define the value 
-object, including its validation rules, with AutoValue you write an abstract class which it then extends with the 
-boilerplate methods.
+object, including its validation rules, with AutoValue you write an abstract class which their annotation processor 
+then extends with the boilerplate methods.
 
 We fundamentally believe that the definition of _what is_ your value object, including it's validation, belongs in an 
 interface and that the tool should be responsible for creating beautiful, easy to use implementations of that interface.
    
 AutoValue, however, is much more mature than Detox and has been used in a much wider range of projects. If you don't 
-object to their approach or you want something less bleeding-edge, AutoValue should be at the top of your list.
+object to their approach or if you want something less bleeding-edge, AutoValue should be at the top of your list.
   
 ## Lombok
 [Lombok](https://projectlombok.org) is much more long-standing than either AutoValue or Detox. It's also much more 
