@@ -1,0 +1,14 @@
+apply plugin: "java"
+
+repositories { mavenCentral() }
+
+dependencies {
+  compile(
+      "com.google.guava:guava:15.0"
+  )
+  testCompile(
+      "com.google.code.findbugs:jsr305:2.0.2",
+      "javax.mail:mail:1.4.1",
+      "junit:junit:4.11"
+  )
+}
