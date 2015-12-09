@@ -2,7 +2,7 @@
 Java Data Transfer &amp; Value Objects made beautiful
 
 # Objective
-Value Objects in Java are a pain. Such a simple concept — a object representing some a collection of fields — yet 
+Value Objects in Java are a pain. Such a simple concept — an object representing a collection of fields — yet 
 getting them right is both notoriously difficult, requiring well-crafted .equals() and .hashcode() methods, and 
 requiring far too much boilerplate code that must be written and maintained.
 
@@ -106,6 +106,46 @@ To use this magic, all you need to do is:
 * Ensure the detox.jar is in your classpath
 * Set-up your IDE to enable annotation processing and put the generated classes in your project's generated sources 
 root
- 
+
+# Design Choices
+
+## Why Interfaces?
+In the above example, we modelled our User value object as an interface. This might be slightly surprising if you are
+use to seeing value objects as classes, but it has some significant advantages. Decoupling the definition of what 
+our value object _is_ from any particular implementation of it, is not only nice from a theoretical point of view, 
+but it allows other specialized implementations to exist side-by-side in your codebase. For example,
+
+An implementation designed to support JSON serialization for passing objects back and forth to the client. The code 
+responsible for deserializing the request needs only return an instance of the User interface, rather than 
+being forced to return a particular implementation: 
+
+```java
+User fromClient = serializationService.fromRequest(httpServletRequest);
+```
+
+An implementation designed for persistence in a database. Whatever persistence framework your project is using, you 
+will typically have to implement a class to represent the stored data; with the framework often imposing 
+onerous constraints on the design of the class: e.g. a public no-arg constructor (and, consequently, non-final 
+fields), a non-final class, etc. It is then common to map back and forth between these persistence classes and the 
+data-transfer classes, resulting in a a proliferation of mapping code for each entity. Detox, by using interfaces to 
+define its value objects, allows the persistence classes to simply _implement_ the value object interface in the 
+normal way,  
+
+```java 
+@com.googlecode.objectify.annotation.Entity
+@com.googlecode.objectify.annotation.Cache
+public final class UserEntity implements User {
+  // All the persistence ugliness...
+...
+}
+```
+
+and the resulting object returned from your persistence code can be used seemlessly throughout your code together 
+with other implementations of User.
+
+This freedom comes from defining a value object as _what it is_ rather than _how it is implemented_.
+
+
+
 # JSON Serialization
 (Documentation coming soon)
