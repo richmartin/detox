@@ -107,7 +107,7 @@ public class BuilderTest {
   }
 
   @Test
-  public void withCstomNullableShouldBeBuildable() {
+  public void withCustomNullableShouldBeBuildable() {
     final HasCustomNullable withDefaultNullable = HasCustomNullableBuilder.newBuilder().build();
     assertNull(withDefaultNullable.getSomeNullableString());
 
