@@ -29,7 +29,6 @@ public class BuilderSynthesiser {
             "                                                                                  \n" +
             "import java.util.*;                                                                                  \n" +
             "import javax.annotation.Generated;                                                 \n" +
-            "import javax.annotation.Nullable;                                                 \n" +
             "import com.moozvine.detox.BestEffortSerializer;                                   \n" +
             "import com.moozvine.detox.Serializable;                                           \n" +
             "                                                                                  \n" +
@@ -112,7 +111,7 @@ public class BuilderSynthesiser {
         elementToProcess.getInterfaceSimpleName()));
     for (final SerializableMember member : elementToProcess.getNullableMembers()) {
       w.append(String.format("" +
-              "    CanBuild with%1$s(@%2$s %3$s %4$s);       \n" +
+              "    CanBuild with%1$s(%2$s %3$s %4$s);       \n" +
               "",
           Util.upperCaseFirstChar(member.getFieldName()),
           member.getNullableAnnotation(),
@@ -185,7 +184,7 @@ public class BuilderSynthesiser {
 
     for (final SerializableMember member : nullableMembers) {
       w.append(String.format("" +
-              "    public CanBuild with%1$s(@%2$s final %3$s %4$s) { \n",
+              "    public CanBuild with%1$s(%2$s final %3$s %4$s) { \n",
           Util.upperCaseFirstChar(member.getFieldName()),
           member.getNullableAnnotation(),
           member.getTypeMirror().toString(),

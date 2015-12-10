@@ -105,4 +105,20 @@ public class BuilderTest {
 
     assertEquals("something", value.getAString());
   }
+
+  @Test
+  public void withCstomNullableShouldBeBuildable() {
+    final HasCustomNullable withDefaultNullable = HasCustomNullableBuilder.newBuilder().build();
+    assertNull(withDefaultNullable.getSomeNullableString());
+
+    final HasCustomNullable withAssignedNull = HasCustomNullableBuilder.newBuilder()
+        .withSomeNullableString(null)
+        .build();
+    assertNull(withAssignedNull.getSomeNullableString());
+
+    final HasCustomNullable withNonNull = HasCustomNullableBuilder.newBuilder()
+        .withSomeNullableString("not null")
+        .build();
+    assertEquals("not null", withNonNull.getSomeNullableString());
+  }
 }

@@ -8,17 +8,14 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
 * Created by rich on 17/07/14.
 */
 public class SerializableMember {
-  private static final String[] SUPPORTED_NULLABLE_ANNOTATIONS = new String[]{
-      "javax.annotation.Nullable",
-      "org.jetbrains.annotations.Nullable",
-      "edu.umd.cs.findbugs.annotations.Nullable",
-      "android.support.annotation.Nullable"
-  };
+
+  private static final Pattern NULLABLE_ANNOTATION = Pattern.compile("\\bNullable$");
 
   final ExecutableElement method;
   private final String getterName;
@@ -138,9 +135,10 @@ public class SerializableMember {
   }
 
   public String getNullableAnnotation() {
-    for (final String supportedNullableAnnotation : SUPPORTED_NULLABLE_ANNOTATIONS) {
-      if (hasAnnotation(supportedNullableAnnotation)) {
-        return supportedNullableAnnotation;
+    final List<? extends AnnotationMirror> annotationMirrors = method.getAnnotationMirrors();
+    for (final AnnotationMirror annotationMirror : annotationMirrors) {
+      if (NULLABLE_ANNOTATION.matcher(annotationMirror.getAnnotationType().toString()).find()) {
+        return annotationMirror.toString();
       }
     }
     return null;

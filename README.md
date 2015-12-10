@@ -118,9 +118,10 @@ Detox has comprehensive support for validation of the value objects, throwing an
 earliest possible time it detects a violation of the value object's definition.
 
 The most obvious type of validation that Detox performs is null checking. If a field is not marked as nullable (Detox
-understands any of javax.annotation.Nullable, org.jetbrains.annotations.Nullable, 
-edu.umd.cs.findbugs.annotations.Nullable, or android.support.annotation.Nullable) then the _with_ method will throw 
-an IllegalArgumentException if you try to pass null.
+understands any annotation that has the name “Nullable” e.g. javax.annotation.Nullable, 
+org.jetbrains.annotations.Nullable, edu.umd.cs.findbugs.annotations.Nullable, android.support.annotation.Nullable, or
+your own in-house foo.bar.Nullable) then the _with_ method will throw an IllegalArgumentException if you try to pass
+null.
 
 Often you want to impose constraints on the values of fields. For example, if the id field must be positive:
 
