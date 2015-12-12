@@ -1,9 +1,9 @@
 package com.moozvine.detox;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class ObjectFactoryCache {
   private final Map<Key, ObjectFactory<?>> factories = new HashMap<>();
@@ -27,20 +27,33 @@ class ObjectFactoryCache {
     @Override public boolean equals(final Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
+
       final Key key = (Key) o;
-      return Objects.equal(objectClass, key.objectClass)
-          && Objects.equal(bound, key.bound);
+
+      if (objectClass != null
+          ? !objectClass.equals(key.objectClass)
+          : key.objectClass != null) return false;
+      return !(bound != null
+          ? !bound.equals(key.bound)
+          : key.bound != null);
+
     }
 
     @Override public int hashCode() {
-      return Objects.hashCode(objectClass, bound);
+      int result = objectClass != null
+          ? objectClass.hashCode()
+          : 0;
+      result = 31 * result + (bound != null
+          ? bound.hashCode()
+          : 0);
+      return result;
     }
 
     @Override public String toString() {
-      return Objects.toStringHelper(this)
-          .add("objectClass", objectClass)
-          .add("bound", bound)
-          .toString();
+      return this.getClass().getName() + " {"
+          + "objectClass: " + objectClass
+          + "bound:" + bound
+          + "}";
     }
   }
 
@@ -85,7 +98,8 @@ class ObjectFactoryCache {
       throw new SerializationError(
           "No @GenerateDTO interfaces found for class " + objClass + " within bound " + bound.getName());
     }
-    return (Class<GEN>) Iterables.getLast(result);
+
+    return (Class<GEN>) result.get(result.size() - 1);
   }
 
   private <T extends GEN, GEN extends Serializable> Class<GEN> findOnlyGeneratableInterface(final Class<T> objClass) {
@@ -97,7 +111,7 @@ class ObjectFactoryCache {
     if (result.size() > 1) {
       throw new SerializationError("Multiple @GenerateDTO interfaces found for class " + objClass + ": " + result);
     }
-    return Iterables.getOnlyElement(result);
+    return result.get(0);
   }
 
   private <T extends GEN, GEN extends Serializable> List<Class<GEN>> findAllGeneratableInterfaces(

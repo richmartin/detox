@@ -1,6 +1,5 @@
 package com.moozvine.detox;
 
-import com.google.common.base.Function;
 import com.moozvine.detox.testtypes.SimpleType;
 import com.moozvine.detox.testtypes.TypeWithOptionalFields;
 import org.junit.Test;

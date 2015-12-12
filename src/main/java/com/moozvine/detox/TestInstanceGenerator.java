@@ -1,16 +1,9 @@
 package com.moozvine.detox;
 
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class TestInstanceGenerator {
 
@@ -48,7 +41,15 @@ public final class TestInstanceGenerator {
 
     Object builder = builderClass.getMethod("newBuilder").invoke(null);
     while (!hasBuildMethod(builder)) {
-      builder = invokeSetter(builder, Iterables.getOnlyElement(listSetters(builder)));
+      final List<Method> setters = listSetters(builder);
+      if (setters.isEmpty()) {
+        throw new NoSuchElementException("Iterable is empty.");
+      }
+      if (setters.size() != 1) {
+        throw new IllegalArgumentException("Iterable has more than one element.");
+      }
+
+      builder = invokeSetter(builder, setters.get(0));
     }
     for (final Method setter : listSetters(builder)) {
       invokeSetter(builder, setter);
@@ -104,13 +105,13 @@ public final class TestInstanceGenerator {
   }
 
   private List<Method> listSetters(final Object builder) {
-    final ImmutableList.Builder<Method> result = ImmutableList.builder();
+    final List<Method> result = new ArrayList<>();
     for (final Method method : builder.getClass().getMethods()) {
       if (method.getName().startsWith("with") && method.getParameterTypes().length == 1) {
         result.add(method);
       }
     }
-    return result.build();
+    return result;
   }
 
   private boolean hasBuildMethod(final Object builder) {
@@ -141,13 +142,26 @@ public final class TestInstanceGenerator {
     @Override public boolean equals(final Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
+
       final Key key = (Key) o;
-      return Objects.equal(type, key.type) &&
-          Objects.equal(fieldName, key.fieldName);
+
+      if (type != null
+          ? !type.equals(key.type)
+          : key.type != null) return false;
+      return !(fieldName != null
+          ? !fieldName.equals(key.fieldName)
+          : key.fieldName != null);
+
     }
 
     @Override public int hashCode() {
-      return Objects.hashCode(type, fieldName);
+      int result = type != null
+          ? type.hashCode()
+          : 0;
+      result = 31 * result + (fieldName != null
+          ? fieldName.hashCode()
+          : 0);
+      return result;
     }
   }
 }

@@ -1,8 +1,7 @@
 package org.json;
 
-import com.google.common.base.Charsets;
-
 import java.io.*;
+import java.nio.charset.Charset;
 
 /*
 Copyright (c) 2002 JSON.org
@@ -68,7 +67,7 @@ public class JSONTokener {
    * Construct a JSONTokener from an InputStream.
    */
   public JSONTokener(final InputStream inputStream) throws JSONException {
-    this(new InputStreamReader(inputStream, Charsets.UTF_8));
+    this(new InputStreamReader(inputStream, Charset.forName("UTF_8")));
   }
 
 

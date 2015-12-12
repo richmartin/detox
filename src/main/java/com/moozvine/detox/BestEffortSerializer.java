@@ -1,7 +1,6 @@
 package com.moozvine.detox;
 
 
-import com.google.common.base.Objects;
 import com.moozvine.detox.processor.Util;
 
 import java.lang.reflect.InvocationTargetException;
@@ -53,17 +52,23 @@ public class BestEffortSerializer extends AbstractSerializationService {
   }
 
   private String getGuavaString(final Object obj) {
-    final Objects.ToStringHelper toStringHelper = Objects.toStringHelper(obj);
+    final StringBuilder result = new StringBuilder(obj.getClass().getName() + ":{");
     for (final Method method : obj.getClass().getMethods()) {
       if (Util.isAMember(method)) {
         final String fieldName = Util.getterToFieldName(method.getName());
         try {
-          toStringHelper.add(fieldName, method.invoke(obj));
+          result.append(fieldName);
+          result.append(":");
+          result.append(method.invoke(obj));
         } catch (IllegalAccessException | InvocationTargetException e) {
-          toStringHelper.add(fieldName, "<" + e.getMessage() + ">");
+          result.append(fieldName);
+          result.append(": <");
+          result.append(e.getMessage());
+          result.append(">");
         }
+        result.append(", ");
       }
     }
-    return toStringHelper.toString();
+    return result.toString().replaceAll(", $", "") + "}";
   }
 }

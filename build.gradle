@@ -1,14 +1,87 @@
 apply plugin: "java"
+apply plugin: "maven"
+apply plugin: "signing"
 
 repositories { mavenCentral() }
 
 dependencies {
   compile(
-      "com.google.guava:guava:15.0"
   )
   testCompile(
+      "com.google.guava:guava:15.0",
       "com.google.code.findbugs:jsr305:2.0.2",
       "javax.mail:mail:1.4.1",
       "junit:junit:4.11"
   )
+}
+
+javadoc {
+  excludes = ["**/org/json/**"];
+}
+
+task javadocJar(type: Jar) {
+  classifier = "javadoc"
+  from javadoc
+}
+
+task sourcesJar(type: Jar) {
+  classifier = "sources"
+  from sourceSets.main.allSource
+}
+
+artifacts {
+  archives jar, javadocJar, sourcesJar
+}
+
+signing {
+  sign configurations.archives
+}
+
+group = "com.moozvine"
+archivesBaseName = "detox"
+version = "0.0.1-SNAPSHOT"
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'Moozvine Detox'
+        packaging 'jar'
+        // optionally artifactId can be defined here
+        description 'Java Data Transfer & Value Objects'
+        url 'https://github.com/richmartin/detox'
+
+        scm {
+          connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
+          developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
+          url 'http://foo.googlecode.com/svn/trunk/'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+        developers {
+          developer {
+            id 'richmartin'
+            name 'Rich Martin'
+            email 'rich@moozvine.com'
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,6 +1,5 @@
 package com.moozvine.detox.processor;
 
-import com.google.common.collect.Sets;
 import com.moozvine.detox.Serializable;
 
 import javax.lang.model.element.Element;
@@ -117,10 +116,10 @@ public final class Util {
   }
 
   public static Set<TypeMirror> allSupertypesOf(final DeclaredType memberType) {
-    return Sets.union(
-        allInterfacesOf(memberType),
-        allSuperclassesOf(memberType)
-    );
+    final Set<TypeMirror> result = new HashSet<>();
+    result.addAll(allInterfacesOf(memberType));
+    result.addAll(allSuperclassesOf(memberType));
+    return result;
   }
 
   public static TypeElement asTypeElement(final DeclaredType typeMirror) {
