@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Set;
 
 @SupportedAnnotationTypes("com.moozvine.detox.GenerateDTO")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class GenerateDTOProcessor extends AbstractProcessor {
   @Override
   public boolean process(

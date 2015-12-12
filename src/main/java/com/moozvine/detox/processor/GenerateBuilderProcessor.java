@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Set;
 
 @SupportedAnnotationTypes("com.moozvine.detox.GenerateBuilder")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class GenerateBuilderProcessor extends AbstractProcessor {
   @Override
   public boolean process(
