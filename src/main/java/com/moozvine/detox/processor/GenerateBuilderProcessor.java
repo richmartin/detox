@@ -5,7 +5,6 @@ import com.moozvine.detox.GenerateBuilder;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
-import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.util.Set;
 
 @SupportedAnnotationTypes("com.moozvine.detox.GenerateBuilder")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class GenerateBuilderProcessor extends AbstractProcessor {
   @Override
   public boolean process(
@@ -47,5 +45,9 @@ public class GenerateBuilderProcessor extends AbstractProcessor {
 
   private void error(final String message) {
     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+  }
+
+  @Override public SourceVersion getSupportedSourceVersion() {
+    return SourceVersion.latest();
   }
 }

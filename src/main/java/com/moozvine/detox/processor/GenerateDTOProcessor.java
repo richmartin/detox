@@ -2,7 +2,9 @@ package com.moozvine.detox.processor;
 
 import com.moozvine.detox.GenerateDTO;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -12,7 +14,6 @@ import java.io.IOException;
 import java.util.Set;
 
 @SupportedAnnotationTypes("com.moozvine.detox.GenerateDTO")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class GenerateDTOProcessor extends AbstractProcessor {
   @Override
   public boolean process(
@@ -45,5 +46,9 @@ public class GenerateDTOProcessor extends AbstractProcessor {
 
   private void error(final String message) {
     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+  }
+
+  @Override public SourceVersion getSupportedSourceVersion() {
+    return SourceVersion.latest();
   }
 }

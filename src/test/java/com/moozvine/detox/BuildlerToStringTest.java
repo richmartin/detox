@@ -2,6 +2,8 @@ package com.moozvine.detox;
 
 import com.google.common.collect.ImmutableSet;
 import com.moozvine.detox.testtypes.*;
+import com.moozvine.detox.testtypes.withids.SimpleTypeWithACompoundId;
+import com.moozvine.detox.testtypes.withids.SimpleTypeWithACompoundIdBuilder;
 import org.junit.Test;
 
 import java.util.Date;
@@ -44,14 +46,14 @@ public class BuildlerToStringTest {
 
   @Test
   public void typeWithIDShouldRenderToString() {
-    final SimpleTypeWithAnId built = SimpleTypeWithAnIdBuilder.newBuilder()
+    final SimpleTypeWithACompoundId built = SimpleTypeWithACompoundIdBuilder.newBuilder()
         .withIntegerId(2)
         .withStringId("id")
         .withNotId("anything")
         .build();
 
     final String expected = "{\n" +
-        "  \"serializedType\": \"com.moozvine.detox.testtypes.SimpleTypeWithAnId\",\n" +
+        "  \"serializedType\": \"com.moozvine.detox.testtypes.withids.SimpleTypeWithACompoundId\",\n" +
         "  \"stringId\": \"id\",\n" +
         "  \"integerId\": 2,\n" +
         "  \"notId\": \"anything\"\n" +
@@ -61,17 +63,17 @@ public class BuildlerToStringTest {
 
   @Test
   public void copiedTypeWithIDShouldRenderToString() {
-    final SimpleTypeWithAnId toCopy = SimpleTypeWithAnIdBuilder.newBuilder()
+    final SimpleTypeWithACompoundId toCopy = SimpleTypeWithACompoundIdBuilder.newBuilder()
         .withIntegerId(2)
         .withStringId("id")
         .withNotId("anything")
         .build();
 
-    final SimpleTypeWithAnId copied = SimpleTypeWithAnIdBuilder.copyOf(toCopy)
+    final SimpleTypeWithACompoundId copied = SimpleTypeWithACompoundIdBuilder.copyOf(toCopy)
         .build();
 
     final String expected = "{\n" +
-        "  \"serializedType\": \"com.moozvine.detox.testtypes.SimpleTypeWithAnId\",\n" +
+        "  \"serializedType\": \"com.moozvine.detox.testtypes.withids.SimpleTypeWithACompoundId\",\n" +
         "  \"stringId\": \"id\",\n" +
         "  \"integerId\": 2,\n" +
         "  \"notId\": \"anything\"\n" +

@@ -5,14 +5,13 @@ import javax.lang.model.type.DeclaredType;
 import javax.tools.JavaFileObject;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.moozvine.detox.processor.Util.hasValueOfMethod;
 
 public class DtoSynthesiser {
   private final ProcessingEnvironment processingEnv;
+  private final StandardMethodSynthesiser standardMethodSynthesiser = new StandardMethodSynthesiser();
 
   public DtoSynthesiser(final ProcessingEnvironment processingEnv) {
     this.processingEnv = processingEnv;
@@ -52,8 +51,8 @@ public class DtoSynthesiser {
     writeJsonConstructors(
         w, elementToProcess.getDtoSimpleName(), elementToProcess.getInterfaceSimpleName(), members);
     writeAccessors(w, members);
-    writeStandardMethods(
-        w, elementToProcess.getInterfaceSimpleName(), members);
+    standardMethodSynthesiser.writeEqualityMethods(w, elementToProcess.getInterfaceSimpleName(), members);
+    standardMethodSynthesiser.writeJsonBasedToStringMethod(w);
     writeFactory(
         w, elementToProcess.getDtoSimpleName(), elementToProcess.getInterfaceSimpleName());
 
@@ -73,7 +72,6 @@ public class DtoSynthesiser {
       ));
     }
   }
-
 
   private void writeCopyConstructors(
       final BufferedWriter w,
@@ -602,116 +600,6 @@ public class DtoSynthesiser {
     w.append("    return json;\n");
     w.append("  }\n");
     w.newLine();
-  }
-
-  private void writeStandardMethods(
-      final BufferedWriter w,
-      final String interfaceName,
-      final List<SerializableMember> members) throws IOException {
-    w.append("" +
-            "                                                                  \n" +
-            "  @Override                                                       \n" +
-            "  public String toString() {                                      \n" +
-            "    try {                                                         \n" +
-            "      return json.toString(2);                                    \n" +
-            "    } catch (JSONException impossible) {                          \n" +
-            "      throw new RuntimeException(impossible);                     \n" +
-            "    }                                                             \n" +
-            "  }                                                               \n"
-    );
-
-    final Set<SerializableMember> idMembers = new HashSet<>();
-    for (final SerializableMember member : members) {
-      if (member.isFormsId()) {
-        idMembers.add(member);
-      }
-    }
-
-    if (!idMembers.isEmpty()) {
-
-      w.append(String.format("" +
-              "                                                                  \n" +
-              "  @Override                                                       \n" +
-              "  public boolean equals(Object o) {                               \n" +
-              "    if (this == o) return true;                                   \n" +
-              "    if (!(o instanceof %1$s)) return false;                       \n" +
-              "                                                                  \n" +
-              "    %1$s that = (%1$s) o;                                         \n",
-          interfaceName
-      ));
-
-      for (final SerializableMember member : idMembers) {
-        if (member.getTypeMirror().getKind().isPrimitive()) {
-          w.append(String.format("" +
-                  "    if (%1$s() != that.%1$s()) return false;                      \n",
-              member.getGetterName()));
-        } else {
-          w.append(String.format("" +
-                  "    if ((%1$s() == null && that.%1$s() != null) ||                     \n" +
-                  "        (%1$s() != null && !%1$s().equals(that.%1$s()))) return false; \n",
-              member.getGetterName()));
-        }
-      }
-
-      w.append("" +
-          "                                                                  \n" +
-          "    return true;                                                  \n" +
-          "  }                                                               \n");
-
-      w.append("" +
-          "                                                                  \n" +
-          "  @Override                                                       \n" +
-          "  public int hashCode() {                                         \n" +
-          "    int result = 17;                                              \n");
-
-      for (final SerializableMember idMember : idMembers) {
-        switch (idMember.getTypeMirror().getKind()) {
-          case BOOLEAN:
-            w.append(String.format(
-                "    result = result * 37 + (%1$s() ? 0 : 1);\n",
-                idMember.getGetterName()));
-            break;
-          case BYTE:
-          case CHAR:
-          case SHORT:
-          case INT:
-            w.append(String.format(
-                "    result = result * 37 + (int) %1$s();\n",
-                idMember.getGetterName()));
-            break;
-          case LONG:
-            w.append(String.format(
-                "    result = result * 37 + (int)(%1$s() ^ (%1$s >>> 32));\n",
-                idMember.getGetterName()));
-            break;
-          case FLOAT:
-            w.append(String.format(
-                "    result = result * 37 + Float.floatItIntBits(%1$s);\n",
-                idMember.getGetterName()));
-            break;
-          case DOUBLE:
-            w.append(String.format(
-                "    result = result * 37 + (int)(Double.doubleToLongBits(%1$s()) \n" +
-                    "        ^ (Double.doubleToLongBits(%1$s) >>> 32));",
-                idMember.getGetterName()));
-            break;
-          case ARRAY:
-            w.append(String.format(
-                "    result = result * 37 + (%1$s() == null ? 0 : Arrays.asList(%1$s()).hashCode());\n",
-                idMember.getGetterName()));
-            break;
-          case DECLARED:
-            w.append(String.format(
-                "    result = result * 37 + (%1$s() == null ? 0 : %1$s().hashCode());\n",
-                idMember.getGetterName()));
-            break;
-        }
-      }
-      w.append("" +
-          "                                                                  \n" +
-          "    return result;                                                \n" +
-          "  }                                                               \n");
-    }
   }
 
   private void writeFactory(

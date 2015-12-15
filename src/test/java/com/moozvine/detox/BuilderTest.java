@@ -78,26 +78,6 @@ public class BuilderTest {
   }
 
   @Test
-  public void typesWithFormsIdFieldsShouldBeEqual() {
-
-    final SimpleTypeWithAnId value1 = SimpleTypeWithAnIdBuilder.newBuilder()
-        .withIntegerId(2)
-        .withStringId("string")
-        .withNotId("something")
-        .build();
-
-    final SimpleTypeWithAnId value2 = SimpleTypeWithAnIdBuilder.newBuilder()
-        .withIntegerId(2)
-        .withStringId("string")
-        .withNotId("something else")
-        .build();
-
-    assertEquals(value1, value2);
-    assertEquals(value1.hashCode(), value2.hashCode());
-
-  }
-
-  @Test
   public void nonSerializableTypeShouldBeBuildable() {
     final NonSerializableType value = NonSerializableTypeBuilder.newBuilder()
         .withAString("something")
