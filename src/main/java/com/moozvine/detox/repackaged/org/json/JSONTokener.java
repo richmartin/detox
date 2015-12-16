@@ -67,7 +67,7 @@ public class JSONTokener {
    * Construct a JSONTokener from an InputStream.
    */
   public JSONTokener(final InputStream inputStream) throws JSONException {
-    this(new InputStreamReader(inputStream, Charset.forName("UTF_8")));
+    this(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
   }
 
 

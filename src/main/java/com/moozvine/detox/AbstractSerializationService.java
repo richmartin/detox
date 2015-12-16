@@ -27,7 +27,7 @@ public abstract class AbstractSerializationService implements SerializationServi
   @Override
   public Object deserialize(final InputStream stream)
       throws DeserializationException, IOException {
-    return deserialize(new InputStreamReader(stream, "UTF_8"));
+    return deserialize(new InputStreamReader(stream, "UTF-8"));
   }
 
   @Override
@@ -41,7 +41,7 @@ public abstract class AbstractSerializationService implements SerializationServi
       final InputStream stream,
       final Class<T> expectedType)
       throws DeserializationException, IOException {
-    return deserialize(new InputStreamReader(stream, "UTF_8"), expectedType);
+    return deserialize(new InputStreamReader(stream, "UTF-8"), expectedType);
   }
 
   @Override
@@ -144,7 +144,7 @@ public abstract class AbstractSerializationService implements SerializationServi
   public void write(
       final Serializable obj,
       final OutputStream out) throws IOException {
-    out.write(serialize(obj).getBytes("UTF_8"));
+    out.write(serialize(obj).getBytes("UTF-8"));
   }
 
   @Override
@@ -153,7 +153,7 @@ public abstract class AbstractSerializationService implements SerializationServi
       final Class<T> interfaceType,
       final OutputStream out)
       throws SerializationError, IOException {
-    out.write(serialize(obj, interfaceType).getBytes("UTF_8"));
+    out.write(serialize(obj, interfaceType).getBytes("UTF-8"));
   }
 
   public void setPrettyPrint() {
