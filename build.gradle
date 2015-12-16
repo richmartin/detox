@@ -5,8 +5,6 @@ apply plugin: "signing"
 repositories { mavenCentral() }
 
 dependencies {
-  compile(
-  )
   testCompile(
       "com.google.guava:guava:15.0",
       "com.google.code.findbugs:jsr305:2.0.2",
@@ -39,7 +37,7 @@ signing {
 
 group = "com.moozvine"
 archivesBaseName = "detox"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 uploadArchives {
   repositories {
@@ -47,38 +45,24 @@ uploadArchives {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
       repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: ossrhUsername, password: ossrhPassword)
+        authentication(userName: "xxxx", password: "xxxx")
       }
 
       snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: ossrhUsername, password: ossrhPassword)
+        authentication(userName: "xxxx", password: "xxxx")
       }
 
       pom.project {
         name 'Moozvine Detox'
         packaging 'jar'
-        // optionally artifactId can be defined here
         description 'Java Data Transfer & Value Objects'
         url 'https://github.com/richmartin/detox'
-
-        scm {
-          connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
-          developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
-          url 'http://foo.googlecode.com/svn/trunk/'
-        }
-
-        licenses {
-          license {
-            name 'The Apache License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          }
-        }
 
         developers {
           developer {
             id 'richmartin'
             name 'Rich Martin'
-            email 'rich@moozvine.com'
+            email 'detox@moozvine.com'
           }
         }
       }
