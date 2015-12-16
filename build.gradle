@@ -58,6 +58,19 @@ uploadArchives {
         description 'Java Data Transfer & Value Objects'
         url 'https://github.com/richmartin/detox'
 
+        licenses {
+          license {
+            name 'GNU General Public License v2.0'
+            url 'http://www.gnu.org/licenses/gpl-2.0.txt'
+          }
+        }
+
+        scm {
+          connection 'scm:git:git://github.com/richmartin/detox.git'
+          developerConnection 'scm:git:git://github.com/richmartin/detox.git'
+          url 'https://github.com/richmartin/detox'
+        }
+
         developers {
           developer {
             id 'richmartin'
