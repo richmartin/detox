@@ -8,12 +8,12 @@ import java.util.*;
 public final class TestInstanceGenerator {
 
 
-  private final Map<Class, Function<String, ? extends Object>> valueGenerators = coreValueGenerators();
-  private final Map<Key, Function<String, ? extends Object>> overrideGenerators = new HashMap<>();
+  private final Map<Class, ValueGenerator<? extends Object>> valueGenerators = coreValueGenerators();
+  private final Map<Key, ValueGenerator<? extends Object>> overrideGenerators = new HashMap<>();
 
-  private Map<Class, Function<String, ? extends Object>> coreValueGenerators() {
+  private Map<Class, ValueGenerator<? extends Object>> coreValueGenerators() {
     try {
-      final Map<Class, Function<String, ? extends Object>> result = new HashMap<>();
+      final Map<Class, ValueGenerator<? extends Object>> result = new HashMap<>();
       result.put(String.class, constant("some string"));
       result.put(Byte.class, constant(123));
       result.put(Byte.TYPE, constant(1234));
@@ -59,20 +59,20 @@ public final class TestInstanceGenerator {
 
   public <T> void setValueGeneratorForClass(
       final Class<T> memberClass,
-      final Function<String, T> valueGenerator) {
+      final ValueGenerator<T> valueGenerator) {
     valueGenerators.put(memberClass, valueGenerator);
   }
 
   public <T> void setValueGeneratorForField(
       final Class<T> memberClass,
       final String fieldName,
-      final Function<String, T> valueGenerator) {
+      final ValueGenerator<T> valueGenerator) {
     overrideGenerators.put(new Key(memberClass, fieldName), valueGenerator);
   }
 
-  public static <T> Function<String, T> constant(final T value) {
-    return new Function<String, T>() {
-      @Override public T apply(final String input) {
+  public static <T> ValueGenerator<T> constant(final T value) {
+    return new ValueGenerator<T>() {
+      @Override public T apply(final String fieldName) {
         return value;
       }
     };

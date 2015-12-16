@@ -35,7 +35,7 @@ public class TestInstanceGeneratorTest {
 
   @Test
   public void withAddedValueGeneratorForClass() throws Exception {
-    generator.setValueGeneratorForClass(Date.class, new Function<String, Date>() {
+    generator.setValueGeneratorForClass(Date.class, new ValueGenerator<Date>() {
       @Nullable @Override public Date apply(final String input) {
         return new Date(0);
       }
@@ -49,7 +49,7 @@ public class TestInstanceGeneratorTest {
 
   @Test
   public void withOverriddenValueGeneratorForField() throws Exception {
-    generator.setValueGeneratorForField(String.class, "someString", new Function<String, String>() {
+    generator.setValueGeneratorForField(String.class, "someString", new ValueGenerator<String>() {
       @Nullable @Override public String apply(@Nullable final String input) {
         return "overridden";
       }
