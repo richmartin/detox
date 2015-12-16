@@ -1,6 +1,6 @@
 package com.moozvine.detox;
 
-import org.json.JSONObject;
+import com.moozvine.detox.repackaged.org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;

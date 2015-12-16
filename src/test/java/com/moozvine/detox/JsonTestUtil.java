@@ -1,7 +1,7 @@
 package com.moozvine.detox;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.moozvine.detox.repackaged.org.json.JSONArray;
+import com.moozvine.detox.repackaged.org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import java.util.Set;

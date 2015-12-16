@@ -3,7 +3,7 @@ package com.moozvine.detox;
 import com.moozvine.detox.testtypes.HasPair;
 import com.moozvine.detox.testtypes.HasPairBuilder;
 import com.moozvine.detox.testtypes.Pair;
-import org.json.JSONObject;
+import com.moozvine.detox.repackaged.org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

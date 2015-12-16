@@ -1,4 +1,4 @@
-package org.json;
+package com.moozvine.detox.repackaged.org.json;
 
 /*
  Copyright (c) 2002 JSON.org

@@ -30,9 +30,9 @@ public class DtoSynthesiser {
             "import com.moozvine.detox.AbstractSerializationService;                           \n" +
             "import com.moozvine.detox.DeserializationException;                               \n" +
             "import com.moozvine.detox.ObjectFactory;                                          \n" +
-            "import org.json.JSONArray;                                                        \n" +
-            "import org.json.JSONException;                                                    \n" +
-            "import org.json.JSONObject;                                                       \n" +
+            "import com.moozvine.detox.repackaged.org.json.JSONArray;                          \n" +
+            "import com.moozvine.detox.repackaged.org.json.JSONException;                      \n" +
+            "import com.moozvine.detox.repackaged.org.json.JSONObject;                         \n" +
             "import java.util.*;                                                               \n" +
             "                                                                                  \n" +
             "@SuppressWarnings(\"unchecked\")                                                  \n" +

@@ -1,7 +1,7 @@
 package com.moozvine.detox;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.moozvine.detox.repackaged.org.json.JSONException;
+import com.moozvine.detox.repackaged.org.json.JSONObject;
 
 import java.io.*;
 import java.util.HashMap;

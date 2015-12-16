@@ -1,4 +1,4 @@
-package org.json;
+package com.moozvine.detox.repackaged.org.json;
 
 import java.io.*;
 import java.nio.charset.Charset;

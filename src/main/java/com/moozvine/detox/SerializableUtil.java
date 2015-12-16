@@ -1,8 +1,8 @@
 package com.moozvine.detox;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.moozvine.detox.repackaged.org.json.JSONArray;
+import com.moozvine.detox.repackaged.org.json.JSONException;
+import com.moozvine.detox.repackaged.org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
