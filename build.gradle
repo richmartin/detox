@@ -37,7 +37,7 @@ signing {
 
 group = "com.moozvine"
 archivesBaseName = "detox"
-version = "1.0.0"
+version = "1.0.1"
 
 uploadArchives {
   repositories {
@@ -45,7 +45,7 @@ uploadArchives {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
       repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: "xxxx", password: "xxxx")
+        authentication(userName: "xxx", password: "xxx")
       }
 
       snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
