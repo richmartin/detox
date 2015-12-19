@@ -220,7 +220,7 @@ field is already declared on a type higher up the hierarchy.
 
 # Usage
 To use this magic, all you need to do is:
-* Ensure the detox.jar is in your classpath
+* Ensure the detox.jar is in your classpath, either by adding it manually or adding a compile dependency on the Maven artefact `com.moozvine:detox`from Maven Central.
 * Set-up your IDE to enable annotation processing and put the generated classes in your project's generated sources 
 root
 
